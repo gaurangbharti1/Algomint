@@ -30,12 +30,6 @@ def wait_for_confirmation(client, txid, timeout):
     while not (txinfo.get('confirmed-round') and txinfo.get('confirmed-round') > 0):
         print("Waiting for confirmation")
         last_round += 1
-
-        #Added this to timeout if not completed within desired round. Unsure of how long 1 round takes to complete, otherwise I would perform some maths to convert user's desired timeout time to rounds
-        if last_round > timeout:
-            print("Transcation could not be completed within time")
-            break
-        
         client.status_after_block(last_round)
         txinfo = client.pending_transaction_info(txid)
     print("Transaction {} confirmed in round {}.".format(txid, txinfo.get('confirmed-round')))
@@ -94,7 +88,7 @@ stxn = txn.sign(accounts[1]['sk'])
 txid = algod_client.send_transaction(stxn)
 print('TXID: ' + str(txid))
 
-wait_for_confirmation(algod_client,txid, 20000000) #Using this everywhere to standardise the testing. Transcation fails if under these many rounds
+wait_for_confirmation(algod_client,txid) 
 
 try:
     ptx = algod_client.pending_transaction_info(txid)
@@ -133,7 +127,7 @@ if not holding:
     txid = algod_client.send_transaction(stxn)
     print('TXID: ' + str(txid))
    
-    wait_for_confirmation(algod_client, txid, 20000000)
+    wait_for_confirmation(algod_client, txid)
    
     # This should now show a holding with a balance of 0.
     print_asset_holding(algod_client, accounts[3]['pk'], asset_id)
@@ -155,7 +149,7 @@ txid = algod_client.send_transaction(stxn)
 
 print('TXID: ' + str(txid))
 
-wait_for_confirmation(algod_client, txid, 20000000)
+wait_for_confirmation(algod_client, txid)
 
 print_asset_holding(algod_client, accounts[3]['pk'], asset_id)
 
@@ -175,6 +169,6 @@ stxn = txn.sign(accounts[2]['sk'])
 txid = algod_client.send_transaction(stxn)
 print('TXID: ' + str(txid))
 
-wait_for_confirmation(algod_client, txid, 20000000)
+wait_for_confirmation(algod_client, txid)
 
 print_asset_holding(algod_client, accounts[3]['pk'], asset_id)
