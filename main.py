@@ -23,7 +23,7 @@ algod_token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 
 algod_client = algod.AlgodClient(algod_token=algod_token, algod_address=algod_address)
 
-def wait_for_confirmation(client, txid, timeout):
+def wait_for_confirmation(client, txid):
    
     last_round = client.status().get('last-round')
     txinfo = client.pending_transaction_info(txid)
@@ -66,7 +66,7 @@ print("Account 3 address: {}".format(accounts[3]['pk']))
 
 
 #Creating an Asset
-
+print("Creating Asset")
 params = algod_client.suggested_params()
 
 txn = AssetConfigTxn(
@@ -99,7 +99,7 @@ except Exception as e:
     print(e)
 
 #Transferring Assets
-
+print("Transferring Assets")
 #Opt-in
 
 params =   algod_client.suggested_params()
@@ -155,7 +155,7 @@ print_asset_holding(algod_client, accounts[3]['pk'], asset_id)
 
 
 #Freezing Assets
-
+print("Freezing Assets")
 ams = algod_client.suggested_params()
 
 txn = AssetFreezeTxn(
